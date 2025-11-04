@@ -146,7 +146,7 @@ pub trait GridPoint: Clone + Copy {
     /// Returns an iterator over the 4 grid points orthogonally adjacent to
     /// this one.
     #[inline]
-    fn adj_4(&self) -> AdjIterator {
+    fn adj_4(&self) -> AdjIterator<'_> {
         AdjIterator {
             i: 0,
             p: self.to_ivec2(),
@@ -156,7 +156,7 @@ pub trait GridPoint: Clone + Copy {
 
     /// Returns an iterator over the 8 points adjacent to this one.
     #[inline]
-    fn adj_8(&self) -> AdjIterator {
+    fn adj_8(&self) -> AdjIterator<'_> {
         AdjIterator {
             i: 0,
             p: self.to_ivec2(),
