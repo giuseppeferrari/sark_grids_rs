@@ -24,11 +24,9 @@
 //! assert_eq!("hello", hello);
 //! ```
 
-use std::ops::{Index, IndexMut};
-
-use glam::{IVec2, UVec2};
-
 use crate::{geometry::GridRect, GridPoint, PositionedGrid, SizedGrid};
+use glam::{IVec2, UVec2};
+use std::ops::{Index, IndexMut};
 
 /// A data structure for storing a 2d sized grid of data.
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -107,6 +105,68 @@ impl<T> Grid<T> {
         let iter = self.iter_column_mut(x as usize).skip(y as usize);
         for (v, input) in iter.zip(column) {
             *v = input;
+        }
+    }
+
+    /// Set the value for a position.
+    pub fn set_value(&mut self, xy: impl GridPoint, value: T) {
+        *self.value_mut(xy) = value;
+    }
+
+    /// Retrieve the value at the given position. Will panic if the position is
+    /// out of bounds.
+    #[inline]
+    pub fn value(&self, xy: impl GridPoint) -> T
+    where
+        T: Clone,
+    {
+        let i = xy.as_index(self.size());
+        self.data[i].clone()
+    }
+
+    /// Attempt to the retrieve the value at a given position. Returns [None] if
+    /// the position is out of bounds.
+    #[inline]
+    pub fn get_value(&self, xy: impl GridPoint) -> Option<T>
+    where
+        T: Clone,
+    {
+        let i = xy.get_index(self.size())?;
+        Some(self.data[i].clone())
+    }
+
+    #[inline]
+    pub fn get_value_mut(&mut self, xy: impl GridPoint) -> Option<&mut T> {
+        let i = xy.get_index(self.size())?;
+        Some(&mut self.data[i])
+    }
+
+    pub fn value_mut(&mut self, xy: impl GridPoint) -> &mut T {
+        let i = self.transform_lti(xy);
+        &mut self.data[i]
+    }
+
+    pub fn set_all(&mut self, value: T)
+    where
+        T: Clone,
+    {
+        self.data.fill(value);
+    }
+
+    pub fn values(&self) -> &[T] {
+        &self.data
+    }
+    pub fn values_mut(&mut self) -> &mut [T] {
+        &mut self.data
+    }
+
+    /// Apply a mathematical operation on all values in the grid.
+    pub fn apply_operation(&mut self, operation: impl Fn(T) -> T)
+    where
+        T: Clone,
+    {
+        for v in self.data.iter_mut() {
+            *v = operation(v.clone());
         }
     }
 

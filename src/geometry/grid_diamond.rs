@@ -101,24 +101,3 @@ impl GridShape for GridDiamond {
         GridRect::from_center_size(self.pos, UVec2::splat(self.radius as u32 * 2 + 1))
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::util::Canvas;
-
-    use super::GridDiamond;
-
-    #[test]
-    #[ignore]
-    fn draw_diamonds() {
-        for size in 0..10 {
-            let diamond = GridDiamond::origin(size);
-            let origin = diamond.pos;
-            let mut canvas = Canvas::new([size * 2 + 1, size * 2 + 1]);
-            canvas.put_shape(diamond, '*');
-            canvas.put(origin, 'o');
-
-            canvas.print();
-        }
-    }
-}

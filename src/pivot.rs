@@ -135,36 +135,45 @@ mod tests {
 
     #[test]
     fn grid_pivot_size_offset() {
-        assert_eq!([4, 4], Pivot::TopRight.pivot_position([5, 5]).to_array());
-        assert_eq!([2, 2], Pivot::Center.pivot_position([5, 5]).to_array());
-        assert_eq!([3, 3], Pivot::TopRight.pivot_position([4, 4]).to_array());
-        assert_eq!([2, 2], Pivot::Center.pivot_position([4, 4]).to_array());
+        assert_eq!(
+            [4, 4],
+            Pivot::TopRight.pivot_position([5u32, 5u32]).to_array()
+        );
+        assert_eq!([2, 2], Pivot::Center.pivot_position([5, 5u32]).to_array());
+        assert_eq!(
+            [3, 3],
+            Pivot::TopRight.pivot_position([4u32, 4u32]).to_array()
+        );
+        assert_eq!(
+            [2, 2],
+            Pivot::Center.pivot_position([4u32, 4u32]).to_array()
+        );
     }
 
     #[test]
     fn pivoted_point() {
         let pp = [1, 1].pivot(Pivot::TopLeft);
-        assert_eq!([1, 3], pp.calculate([5, 5]).to_array());
+        assert_eq!([1, 3], pp.calculate([5u32, 5u32]).to_array());
 
         let pp = [1, 1].pivot(Pivot::TopRight);
-        assert_eq!([3, 3], pp.calculate([5, 5]).to_array());
+        assert_eq!([3, 3], pp.calculate([5u32, 5u32]).to_array());
 
         let pp = [1, 1].pivot(Pivot::TopRight);
-        assert_eq!([4, 4], pp.calculate([6, 6]).to_array());
+        assert_eq!([4, 4], pp.calculate([6u32, 6u32]).to_array());
 
         let pp = [1, 1].pivot(Pivot::Center);
-        assert_eq!([4, 4], pp.calculate([6, 6]).to_array());
+        assert_eq!([4, 4], pp.calculate([6u32, 6u32]).to_array());
 
         let pp = [1, 1].pivot(Pivot::Center);
-        assert_eq!([3, 3], pp.calculate([5, 5]).to_array());
+        assert_eq!([3, 3], pp.calculate([5u32, 5u32]).to_array());
 
         let pp = [0, 0].pivot(Pivot::BottomRight);
-        assert_eq!([8, 0], pp.calculate([9, 9]).to_array());
+        assert_eq!([8, 0], pp.calculate([9usize, 9usize]).to_array());
     }
 
     #[test]
     fn center_negative() {
         let p = [-5, -5].pivot(Pivot::Center);
-        assert_eq!([0, 0], p.calculate([10, 10]).to_array());
+        assert_eq!([0, 0], p.calculate([10usize, 10usize]).to_array());
     }
 }

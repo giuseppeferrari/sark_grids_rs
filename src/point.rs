@@ -3,7 +3,7 @@ use super::{
     pivot::{Pivot, PivotedPoint},
     size::GridSize,
 };
-use glam::{IVec2, UVec2, Vec2};
+use glam::{IVec2, USizeVec2, UVec2, Vec2};
 
 use super::direction::{DIR_4, DIR_8};
 
@@ -20,14 +20,6 @@ pub trait GridPoint: Clone + Copy {
         self.xy().y
     }
 
-    fn width(&self) -> usize {
-        self.x() as usize
-    }
-
-    fn height(&self) -> usize {
-        self.y() as usize
-    }
-
     fn to_ivec2(&self) -> IVec2 {
         IVec2::new(self.x(), self.y())
     }
@@ -37,6 +29,18 @@ pub trait GridPoint: Clone + Copy {
     }
     fn to_vec2(&self) -> Vec2 {
         self.to_ivec2().as_vec2()
+    }
+
+    fn to_usize_vec2(&self) -> USizeVec2 {
+        USizeVec2::new(self.x() as usize, self.y() as usize)
+    }
+
+    fn to_tuple(&self) -> (i32, i32) {
+        (self.to_ivec2().x, self.to_ivec2().y)
+    }
+
+    fn to_usize_tuple(&self) -> (usize, usize) {
+        (self.to_usize_vec2().x, self.to_usize_vec2().y)
     }
 
     fn to_array(&self) -> [i32; 2] {
@@ -53,12 +57,8 @@ pub trait GridPoint: Clone + Copy {
     /// bounds.
     #[inline]
     fn as_index(&self, size: impl GridSize) -> usize {
-        let p = self.to_ivec2();
-        debug_assert!(
-            p.cmpge(IVec2::ZERO).all() && p.cmplt(size.to_ivec2()).all(),
-            "Attempting to convert an out of bounds grid position {:?} into a 1d index from a grid size of {}", self.to_array(), size.to_ivec2()
-        );
-        self.y() as usize * size.width() + self.x() as usize
+        let point = self.to_usize_vec2();
+        point.y * size.width() + point.x
     }
 
     /// Calculate the 1d index of this position within a sized grid.
@@ -202,11 +202,25 @@ macro_rules! impl_grid_point {
     };
 }
 
+macro_rules! impl_grid_tuple {
+    ($type:ty) => {
+        impl GridPoint for ($type, $type) {
+            fn xy(&self) -> IVec2 {
+                IVec2::new(self.0 as i32, self.1 as i32)
+            }
+        }
+    };
+}
+
 impl_grid_point!(IVec2);
 impl_grid_point!(UVec2);
+impl_grid_point!(USizeVec2);
 impl_grid_point!([u32; 2]);
 impl_grid_point!([i32; 2]);
 impl_grid_point!([usize; 2]);
+impl_grid_tuple!(u32);
+impl_grid_tuple!(i32);
+impl_grid_tuple!(usize);
 
 #[cfg(test)]
 mod tests {

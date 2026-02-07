@@ -1,36 +1,21 @@
 //! A trait for types representing the size of a rectangular 2d grid.
-use glam::{IVec2, UVec2, Vec2};
+use glam::{IVec2, USizeVec2, UVec2};
+
+use crate::GridPoint;
 
 /// A trait for types representing the size of a rectangular 2d grid.
-pub trait GridSize: Clone {
+pub trait GridSize: Clone + GridPoint {
     fn width(&self) -> usize;
     fn height(&self) -> usize;
+
+    fn size(&self) -> USizeVec2 {
+        USizeVec2::new(self.width(), self.height())
+    }
+
     /// The number of tiles for a grid of this size.
     fn tile_count(&self) -> usize {
         self.width() * self.height()
     }
-    fn to_ivec2(&self) -> IVec2 {
-        IVec2 {
-            x: self.width() as i32,
-            y: self.height() as i32,
-        }
-    }
-    fn to_uvec2(&self) -> UVec2 {
-        UVec2 {
-            x: self.width() as u32,
-            y: self.height() as u32,
-        }
-    }
-    fn to_vec2(&self) -> Vec2 {
-        Vec2 {
-            x: (self.width() as i32) as f32,
-            y: (self.height() as i32) as f32,
-        }
-    }
-    fn to_array(&self) -> [usize; 2] {
-        [self.width(), self.height()]
-    }
-
     fn contains_point(&self, xy: impl super::GridPoint) -> bool {
         let xy = xy.to_ivec2();
         xy.cmpge(IVec2::ZERO).all() && xy.cmplt(self.to_ivec2()).all()
@@ -51,7 +36,23 @@ macro_rules! impl_grid_size {
     };
 }
 
+macro_rules! impl_grid_tuple_size {
+    ($type:ty) => {
+        impl GridSize for ($type, $type) {
+            fn width(&self) -> usize {
+                self.0 as usize
+            }
+
+            fn height(&self) -> usize {
+                self.1 as usize
+            }
+        }
+    };
+}
+
 impl_grid_size!(UVec2);
+impl_grid_size!(USizeVec2);
 impl_grid_size!([u32; 2]);
-impl_grid_size!([i32; 2]);
 impl_grid_size!([usize; 2]);
+impl_grid_tuple_size!(u32);
+impl_grid_tuple_size!(usize);

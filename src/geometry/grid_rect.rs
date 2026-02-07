@@ -656,25 +656,25 @@ pub trait PositionedGrid: SizedGrid {
 mod tests {
     use glam::IVec2;
 
-    use crate::{geometry::grid_rect::PositionedGrid, util::Canvas, GridPoint, Pivot};
+    use crate::{geometry::grid_rect::PositionedGrid, GridPoint, Pivot};
 
     use super::{GridRect, SizedGrid};
 
     #[test]
     fn rect_min_max() {
-        let rect = GridRect::from_points([1, 1], [3, 3]);
+        let rect = GridRect::from_points([1, 1], [3u32, 3u32]);
         assert_eq!([1, 1], rect.min().to_array());
         assert_eq!([3, 3], rect.max().to_array());
 
-        let rect = GridRect::from_points([0, 0], [3, 3]);
+        let rect = GridRect::from_points([0, 0], [3u32, 3u32]);
         assert_eq!([0, 0], rect.min().to_array());
         assert_eq!([3, 3], rect.max().to_array());
 
-        let rect = GridRect::from_points([-1, -1], [4, 4]);
+        let rect = GridRect::from_points([-1, -1], [4u32, 4u32]);
         assert_eq!([-1, -1], rect.min().to_array());
         assert_eq!([4, 4], rect.max().to_array());
 
-        let rect = GridRect::from_points([-5, -5], [3, 3]);
+        let rect = GridRect::from_points([-5, -5], [3u32, 3u32]);
         assert_eq!([-5, -5], rect.min().to_array());
         assert_eq!([3, 3], rect.max().to_array());
 
@@ -685,26 +685,26 @@ mod tests {
 
     #[test]
     fn contains_point() {
-        let rect = GridRect::center_origin([5, 5]);
+        let rect = GridRect::center_origin([6u32, 5u32]);
         assert!(rect.contains_point([-2, -2]));
         assert!(rect.contains_point([2, 2]));
-        assert!(!rect.contains_point([3, 3]));
+        assert!(!rect.contains_point([3u32, 3u32]));
         assert!(!rect.contains_point([-3, -3]));
     }
 
     #[test]
     fn from_bl() {
-        let rect = GridRect::center_origin([5, 5]);
-        let rect2 = GridRect::new([-2, -2], [5, 5]);
+        let rect = GridRect::center_origin([6u32, 5u32]);
+        let rect2 = GridRect::new([-2, -2], [6u32, 5u32]);
 
         assert_eq!(rect, rect2);
     }
 
     #[test]
     fn overlap() {
-        let a = GridRect::new([-1, -1], [3, 3]);
-        let b = GridRect::new([1, 1], [3, 3]);
-        let c = GridRect::new([3, 3], [3, 3]);
+        let a = GridRect::new([-1, -1], [3u32, 3u32]);
+        let b = GridRect::new([1, 1], [3u32, 3u32]);
+        let c = GridRect::new([3u32, 3u32], [3u32, 3u32]);
         assert!(a.overlaps(b));
         assert!(b.overlaps(a));
         assert!(b.overlaps(c));
@@ -716,9 +716,9 @@ mod tests {
         assert!(b.overlaps(b));
         assert!(c.overlaps(c));
 
-        let a = GridRect::new([-2, -2], [4, 4]);
-        let b = GridRect::new([1, 1], [4, 4]);
-        let c = GridRect::new([4, 4], [4, 4]);
+        let a = GridRect::new([-2, -2], [4u32, 4u32]);
+        let b = GridRect::new([1, 1], [4u32, 4u32]);
+        let c = GridRect::new([4u32, 4u32], [4u32, 4u32]);
         assert!(a.overlaps(b));
         assert!(b.overlaps(a));
         assert!(b.overlaps(c));
@@ -729,23 +729,11 @@ mod tests {
         assert!(a.overlaps(a));
         assert!(b.overlaps(b));
         assert!(c.overlaps(c));
-    }
-
-    #[test]
-    #[ignore]
-    fn big() {
-        let rect = GridRect::center_origin([30, 30]);
-        let mut canvas = Canvas::new([32, 32]);
-
-        for p in rect {
-            canvas.put(p, '*');
-        }
-        canvas.print();
     }
 
     #[test]
     fn envelope_point() {
-        let mut rect = GridRect::from_points([1, 1], [3, 3]);
+        let mut rect = GridRect::from_points([1, 1], [3u32, 3u32]);
         rect.envelope_point([0, 0]);
         assert_eq!([0, 0], rect.min().to_array());
         assert_eq!([3, 3], rect.max().to_array());
@@ -763,8 +751,8 @@ mod tests {
 
     #[test]
     fn envelope_rect() {
-        let mut rect = GridRect::from_points([1, 1], [3, 3]);
-        rect.merge(GridRect::from_points([4, 4], [8, 8]));
+        let mut rect = GridRect::from_points([1, 1], [3u32, 3u32]);
+        rect.merge(GridRect::from_points([4u32, 4u32], [8, 8]));
         assert_eq!([8, 8], rect.max().to_array());
         assert_eq!([1, 1], rect.min().to_array());
 
@@ -774,7 +762,7 @@ mod tests {
 
     #[test]
     fn pivot_corners() {
-        let rect = GridRect::from_points([0, 0], [5, 5]);
+        let rect = GridRect::from_points([0, 0], [6u32, 5u32]);
         assert_eq!([0, 0], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([0, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
@@ -786,13 +774,13 @@ mod tests {
         assert_eq!([6, 6], rect.pivot_point(Pivot::TopRight).to_array());
         assert_eq!([6, 0], rect.pivot_point(Pivot::BottomRight).to_array());
 
-        let rect = GridRect::from_points([-5, -5], [5, 5]);
+        let rect = GridRect::from_points([-5, -5], [6u32, 5u32]);
         assert_eq!([-5, -5], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([-5, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
         assert_eq!([5, -5], rect.pivot_point(Pivot::BottomRight).to_array());
 
-        let rect = GridRect::from_points([-4, -4], [5, 5]);
+        let rect = GridRect::from_points([-4, -4], [6u32, 5u32]);
         assert_eq!([-4, -4], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([-4, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
@@ -801,7 +789,7 @@ mod tests {
 
     #[test]
     fn iter_grid_points() {
-        let rect = GridRect::new([0, 0], [3, 3]);
+        let rect = GridRect::new([0, 0], [3u32, 3u32]);
         let points: Vec<IVec2> = rect.iter_grid_points().collect();
         assert_eq!([0, 0], points[0].to_array());
         assert_eq!([1, 0], points[1].to_array());
@@ -816,7 +804,7 @@ mod tests {
 
     #[test]
     fn iter_border() {
-        let rect = GridRect::from_points([0, 0], [5, 5]);
+        let rect = GridRect::from_points([0, 0], [6u32, 5u32]);
         let points: Vec<_> = rect.iter_rect_border().map(|v| v.to_array()).collect();
 
         assert_eq!([0, 0], points[0]);
@@ -858,7 +846,7 @@ mod tests {
 
     #[test]
     fn pivot_point() {
-        let rect = GridRect::from_points([0, 0], [5, 5]);
+        let rect = GridRect::from_points([0, 0], [6u32, 5u32]);
         assert_eq!([0, 0], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([0, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
@@ -870,13 +858,13 @@ mod tests {
         assert_eq!([6, 6], rect.pivot_point(Pivot::TopRight).to_array());
         assert_eq!([6, 0], rect.pivot_point(Pivot::BottomRight).to_array());
 
-        let rect = GridRect::from_points([-5, -5], [5, 5]);
+        let rect = GridRect::from_points([-5, -5], [6u32, 5u32]);
         assert_eq!([-5, -5], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([-5, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
         assert_eq!([5, -5], rect.pivot_point(Pivot::BottomRight).to_array());
 
-        let rect = GridRect::from_points([-4, -4], [5, 5]);
+        let rect = GridRect::from_points([-4, -4], [6u32, 5u32]);
         assert_eq!([-4, -4], rect.pivot_point(Pivot::BottomLeft).to_array());
         assert_eq!([-4, 5], rect.pivot_point(Pivot::TopLeft).to_array());
         assert_eq!([5, 5], rect.pivot_point(Pivot::TopRight).to_array());
@@ -885,7 +873,7 @@ mod tests {
 
     #[test]
     fn pivoted_point() {
-        let rect = GridRect::from_points([0, 0], [5, 5]);
+        let rect = GridRect::from_points([0, 0], [6u32, 5u32]);
         assert_eq!(
             [1, 1],
             rect.pivoted_point([1, 1].pivot(Pivot::BottomLeft))
@@ -905,7 +893,7 @@ mod tests {
                 .to_array()
         );
 
-        let rect = GridRect::from_points([-5, -4], [3, 3]);
+        let rect = GridRect::from_points([-5, -4], [3u32, 3u32]);
         assert_eq!(
             [-4, -3],
             rect.pivoted_point([1, 1].pivot(Pivot::BottomLeft))

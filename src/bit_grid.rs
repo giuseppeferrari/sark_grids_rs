@@ -204,7 +204,7 @@ mod tests {
 
     #[test]
     fn iter() {
-        let mut grid = BitGrid::new([10, 5]);
+        let mut grid = BitGrid::new([10usize, 5usize]);
 
         grid.set_true([0, 0]);
         grid.set_true([0, 1]);
