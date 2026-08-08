@@ -24,14 +24,14 @@
 //! assert_eq!("hello", hello);
 //! ```
 
+use bevy_math::{IVec2, UVec2};
+use bevy_reflect::Reflect;
 use std::ops::{Index, IndexMut};
-
-use glam::{IVec2, UVec2};
 
 use crate::{geometry::GridRect, GridPoint, PositionedGrid, SizedGrid};
 
 /// A data structure for storing a 2d sized grid of data.
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Reflect, Eq, PartialEq)]
 pub struct Grid<T> {
     data: Vec<T>,
     size: UVec2,

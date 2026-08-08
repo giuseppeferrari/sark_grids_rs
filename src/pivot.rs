@@ -1,8 +1,8 @@
 //! A pivot point on a 2d grid.
 use std::ops::Sub;
 
+use bevy_math::{IVec2, Vec2};
 use enum_ordinalize::Ordinalize;
-use glam::{IVec2, Vec2};
 
 use crate::GridPoint;
 

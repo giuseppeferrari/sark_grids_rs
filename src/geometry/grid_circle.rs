@@ -1,5 +1,5 @@
 // https://www.redblobgames.com/grids/circle-drawing/
-use glam::{IVec2, UVec2, Vec2};
+use bevy_math::{IVec2, UVec2, Vec2};
 
 use crate::{GridPoint, GridShape};
 

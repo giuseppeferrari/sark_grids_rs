@@ -1,9 +1,8 @@
 //! A rectangular grid of bit values for representing simple state across a large grid.
 
-use bit_vec::BitVec;
-use glam::{IVec2, UVec2};
-
 use crate::{GridPoint, GridRect, GridSize, SizedGrid};
+use bevy_math::{IVec2, UVec2};
+use bit_vec::BitVec;
 
 /// A rectangular grid with it's underlying data defined as a [BitVec].
 #[derive(Default, Clone)]
@@ -97,10 +96,7 @@ impl BitGrid {
 
     /// Set the value for all bits.
     pub fn set_all(&mut self, value: bool) {
-        match value {
-            true => self.bits.set_all(),
-            false => self.bits.clear(),
-        }
+        self.bits.fill(value)
     }
 
     /// A reference to the underlying bit data.
@@ -130,7 +126,7 @@ impl BitGrid {
 
     /// Unset all bits in the grid.
     pub fn clear(&mut self) {
-        self.bits.clear();
+        self.bits.fill(false);
     }
 
     /// Iterate over each bit in the grid row by row, starting from the bottom

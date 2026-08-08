@@ -1,5 +1,5 @@
 //! A trait for types representing the size of a rectangular 2d grid.
-use glam::{IVec2, UVec2, Vec2};
+use bevy_math::{IVec2, USizeVec2, UVec2, Vec2};
 
 /// A trait for types representing the size of a rectangular 2d grid.
 pub trait GridSize: Clone {
@@ -52,6 +52,7 @@ macro_rules! impl_grid_size {
 }
 
 impl_grid_size!(UVec2);
+impl_grid_size!(USizeVec2);
 impl_grid_size!([u32; 2]);
 impl_grid_size!([i32; 2]);
 impl_grid_size!([usize; 2]);

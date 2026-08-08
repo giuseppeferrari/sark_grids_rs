@@ -5,7 +5,7 @@ use std::{
     ops::{Index, IndexMut},
 };
 
-use glam::{IVec2, UVec2};
+use bevy_math::{IVec2, UVec2};
 
 use crate::{GridPoint, SizedGrid};
 

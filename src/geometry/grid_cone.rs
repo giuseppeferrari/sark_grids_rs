@@ -1,4 +1,4 @@
-use glam::IVec2;
+use bevy_math::IVec2;
 
 use crate::GridPoint;
 
@@ -149,7 +149,7 @@ fn points_from_cone(cone: &GridCone) -> [IVec2; 3] {
 
 #[cfg(test)]
 mod test {
-    use glam::UVec2;
+    use bevy_math::UVec2;
 
     use super::*;
     use crate::util::Canvas;

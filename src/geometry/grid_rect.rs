@@ -1,6 +1,6 @@
 use std::ops::Sub;
 
-use glam::{ivec2, IVec2, UVec2};
+use bevy_math::{ivec2, IVec2, UVec2};
 
 use super::GridShape;
 use crate::{GridPoint, GridSize, Pivot, PivotedPoint};
@@ -277,7 +277,7 @@ impl GridRect {
 }
 
 impl SizedGrid for GridRect {
-    fn size(&self) -> glam::UVec2 {
+    fn size(&self) -> bevy_math::UVec2 {
         self.size
     }
 }
@@ -654,7 +654,7 @@ pub trait PositionedGrid: SizedGrid {
 
 #[cfg(test)]
 mod tests {
-    use glam::IVec2;
+    use bevy_math::IVec2;
 
     use crate::{geometry::grid_rect::PositionedGrid, util::Canvas, GridPoint, Pivot};
 

@@ -1,5 +1,5 @@
 use crate::{GridPoint, GridShape, GridSize};
-use glam::UVec2;
+use bevy_math::UVec2;
 
 pub struct Canvas {
     size: UVec2,

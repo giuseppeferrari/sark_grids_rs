@@ -1,21 +1,21 @@
 //! A rectangular grid of float values with utility functions for performing operations
 //! across the grid.
 
+use bevy_math::{IVec2, UVec2};
+use bevy_reflect::Reflect;
 use std::ops::{Index, IndexMut};
-
-use glam::{IVec2, UVec2};
 
 use crate::{GridPoint, GridRect, GridSize, SizedGrid};
 
 /// A rectangular grid of floating point values.
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, Reflect, PartialEq)]
 pub struct FloatGrid {
     data: Vec<f32>,
     size: UVec2,
 }
 
 impl SizedGrid for FloatGrid {
-    fn size(&self) -> glam::UVec2 {
+    fn size(&self) -> bevy_math::UVec2 {
         self.size
     }
 }

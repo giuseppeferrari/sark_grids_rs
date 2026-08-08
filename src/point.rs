@@ -3,7 +3,7 @@ use super::{
     pivot::{Pivot, PivotedPoint},
     size::GridSize,
 };
-use glam::{IVec2, UVec2, Vec2};
+use bevy_math::{IVec2, USizeVec2, UVec2, Vec2};
 
 use super::direction::{DIR_4, DIR_8};
 
@@ -34,6 +34,10 @@ pub trait GridPoint: Clone + Copy {
 
     fn to_uvec2(&self) -> UVec2 {
         self.to_ivec2().as_uvec2()
+    }
+
+    fn to_usizevec2(&self) -> USizeVec2 {
+        self.to_ivec2().as_usizevec2()
     }
     fn to_vec2(&self) -> Vec2 {
         self.to_ivec2().as_vec2()
@@ -204,6 +208,7 @@ macro_rules! impl_grid_point {
 
 impl_grid_point!(IVec2);
 impl_grid_point!(UVec2);
+impl_grid_point!(USizeVec2);
 impl_grid_point!([u32; 2]);
 impl_grid_point!([i32; 2]);
 impl_grid_point!([usize; 2]);
